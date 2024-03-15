@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "roocoop"
+version = "0.1.0"
+description = ""
+authors = ["syrlybajramazan <syrlybai056@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.3"
+drf-yasg = "^1.21.7"
+djangorestframework = "^3.14.0"
+django-cors-headers = "^4.3.1"
+rest-framework-simplejwt = "^0.0.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
