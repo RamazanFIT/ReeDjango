@@ -22,16 +22,16 @@ class DocumentViewSet(viewsets.ModelViewSet):
         serializer = DocumentSerializer(instance=document)
         return Response(data=serializer.data)
     
-    # post 
+    # patch 
     def change_document(self, request):
-        
-
         document = Document.objects.filter(pk=request.data['id'])[0]
         document.label = request.data['label']
+        if (not request.data.get('file', True)) and document.file != request.data['file']:
+            document.file = request.data['file']
         document.save()
         serializer = DocumentSerializer(instance=document)
         return Response(serializer.data)
-    
+
     # delete 
     def delete_document(self, request, pk):
         document = Document.objects.filter(pk=pk)[0].delete()
