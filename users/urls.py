@@ -10,10 +10,10 @@ urlpatterns = [
     # path('test/<str:name>/', TestViewSet.as_view({'get': 'get_list'}), name="someTest"),
 #     path('test/post', TestViewSet.as_view({'post': 'post_req'}), name="someTest"),
 
-    path('login/', AuthorizationViewSet.as_view({'post': 'login'}), name="login"),
-    path('signup/', AuthorizationViewSet.as_view({'post': 'signup'}), name="signup"),
-    path('test/', AuthorizationViewSet.as_view({'get': 'test'}), name="testing"),
-    path('logout/', AuthorizationViewSet.as_view({'post': 'logout'}), name="testing"),
+    path('login/', AuthorizationViewSet.as_view({'post': 'login'}), name="authorization"),
+    path('signup/', AuthorizationViewSet.as_view({'post': 'signup'}), name="authorization"),
+    path('test/', AuthorizationViewSet.as_view({'get': 'test'}), name="authorization"),
+    path('logout/', AuthorizationViewSet.as_view({'post': 'logout'}), name="authorization"),
     
 ]
 
