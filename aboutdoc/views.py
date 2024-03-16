@@ -44,8 +44,3 @@ class DocumentViewSet(viewsets.ModelViewSet):
             serializer.save()
 
         return Response(serializer.data)
-    
-
-    
-
-    

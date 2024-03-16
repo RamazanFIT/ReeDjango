@@ -12,5 +12,5 @@ urlpatterns = [
     path('delete/<int:pk>', DocumentViewSet.as_view({'delete': 'delete_document'}), name="doc"),
     path('change/', DocumentViewSet.as_view({'patch': 'change_document'}), name="doc"),
     path('add/', DocumentViewSet.as_view({'post': 'add_document'}), name="doc"),
-    
 ]
+

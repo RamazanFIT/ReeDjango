@@ -8,4 +8,5 @@ class DocumentSerializer(serializers.ModelSerializer):
         model = Document 
         fields = ['id', 'label', 'file']
         # fields = ['id', 'label']
-        
+
+   

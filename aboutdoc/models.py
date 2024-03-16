@@ -5,5 +5,3 @@ class Document(models.Model):
     label = models.TextField()
     file = models.FileField(upload_to='uploads/')
 
-    
-    
