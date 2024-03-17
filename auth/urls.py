@@ -40,6 +40,7 @@ urlpatterns = [
     path('api/doc/', include('aboutdoc.urls')),
     path('api/catalog/', include('catalog.urls')),
     path('api/news/', include('news.urls')),
+    path('api/contact/', include('contact.urls')),
     
 ]
 

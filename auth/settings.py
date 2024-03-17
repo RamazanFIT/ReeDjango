@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'aboutdoc',
     'catalog',
-    'news'
+    'news',
+    'contact'
 ]
 
 MIDDLEWARE = [
