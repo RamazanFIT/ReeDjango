@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'aboutdoc',
-    'catalog'
+    'catalog',
+    'news'
 ]
 
 MIDDLEWARE = [
