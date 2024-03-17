@@ -16,3 +16,10 @@ class PoiskPravoobladateley(models.Model):
 
     name = models.TextField()
     file = models.FileField(upload_to='catalogs/')
+
+
+class InostrannyeOkupy(models.Model):
+
+    text = models.TextField()
+    title = models.CharField(max_length=255)
+    

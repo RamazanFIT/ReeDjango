@@ -1,7 +1,15 @@
 from rest_framework.response import Response
 from rest_framework import viewsets, status
-from .models import Catalog, Reestr, PoiskPravoobladateley
-from .serializers import CatalogSerializer, ReestrSerializer, PoiskPravoobladateleySerializer
+from .models import (Catalog,
+                     Reestr,
+                     PoiskPravoobladateley,
+                     InostrannyeOkupy,
+                     )
+from .serializers import (CatalogSerializer,
+                          ReestrSerializer, 
+                          PoiskPravoobladateleySerializer,
+                          InostrannyeOkupySerializer,
+                          )
 from django.shortcuts import get_object_or_404
 
 
@@ -126,4 +134,44 @@ class PoiskPravoobladateleyViewSet(viewsets.ModelViewSet):
             serializer.save()
 
         return Response(serializer.data)
- 
+
+
+
+class InostrannyeOkupyViewSet(viewsets.ModelViewSet):
+    queryset = InostrannyeOkupy.objects.all()
+    serializer_class = InostrannyeOkupySerializer
+    
+    # get
+    def get_all_inostrannye_okupys(self, request):
+        queryset = InostrannyeOkupy.objects.all()
+        serializer = InostrannyeOkupySerializer(instance=queryset, many=True)
+        return Response(data=serializer.data)
+    
+    # get 
+    def get_inostrannye_okupy(self, request, pk):
+        inostrannye_okupy = InostrannyeOkupy.objects.filter(pk=pk)[0]
+        serializer = InostrannyeOkupySerializer(instance=inostrannye_okupy)
+        return Response(data=serializer.data)
+    
+    # patch 
+    def change_inostrannye_okupy(self, request):
+        inostrannye_okupy = InostrannyeOkupy.objects.filter(pk=request.data['id'])[0]
+        inostrannye_okupy.title = request.data['title']
+        inostrannye_okupy.text = request.data['text']
+        inostrannye_okupy.save()
+        serializer = InostrannyeOkupySerializer(instance=inostrannye_okupy)
+        return Response(serializer.data)
+
+    # delete 
+    def delete_inostrannye_okupy(self, request, pk):
+        inostrannye_okupy = InostrannyeOkupy.objects.filter(pk=pk)[0].delete()
+        return Response({"detail" : "success"})
+    
+    def add_inostrannye_okupy(self, request):
+        serializer = InostrannyeOkupySerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+
+        return Response(serializer.data)
+  

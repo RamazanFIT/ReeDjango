@@ -1,6 +1,6 @@
 from rest_framework import routers
 from django.urls import include, path
-from .views import CatalogViewSet, ReestrViewSet, PoiskPravoobladateleyViewSet
+from .views import CatalogViewSet, ReestrViewSet, PoiskPravoobladateleyViewSet, InostrannyeOkupyViewSet
 
 
 urlpatterns = [
@@ -21,5 +21,11 @@ urlpatterns = [
     path('poisk_pravoobladateley/delete/<int:pk>', PoiskPravoobladateleyViewSet.as_view({'delete': 'delete_poisk_pravoobladateley'}), name="doc"),
     path('poisk_pravoobladateley/change/', PoiskPravoobladateleyViewSet.as_view({'patch': 'change_poisk_pravoobladateley'}), name="doc"),
     path('poisk_pravoobladateley/add/', PoiskPravoobladateleyViewSet.as_view({'post': 'add_poisk_pravoobladateley'}), name="doc"),
+    
+    path('inostrannye_okupy/all/', InostrannyeOkupyViewSet.as_view({'get': 'get_all_inostrannye_okupys'}), name="doc"),
+    path('inostrannye_okupy/catalog/<int:pk>', InostrannyeOkupyViewSet.as_view({'get': 'get_inostrannye_okupy'}), name="doc"),
+    path('inostrannye_okupy/delete/<int:pk>', InostrannyeOkupyViewSet.as_view({'delete': 'delete_inostrannye_okupy'}), name="doc"),
+    path('inostrannye_okupy/change/', InostrannyeOkupyViewSet.as_view({'patch': 'change_inostrannye_okupy'}), name="doc"),
+    path('inostrannye_okupy/add/', InostrannyeOkupyViewSet.as_view({'post': 'add_inostrannye_okupy'}), name="doc"),
 ]
 
