@@ -4,14 +4,23 @@ from .models import News, AdditionalPhotosOfNews
 from .serializers import NewsSerializer, AdditionalPhotosSerializer
 from django.shortcuts import get_object_or_404
 
+# swagger 
+from drf_yasg.utils import swagger_auto_schema
 
 
 
 class NewsViewSet(viewsets.ModelViewSet):
     queryset = News.objects.all()
+    
     serializer_class = NewsSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST' or self.request.method == 'PUT':
+            return AdditionalPhotosSerializer
+        return NewsSerializer
 
     # get 
+    @swagger_auto_schema(operation_summary="getting all of the news form site")
     def get_all_news(self, request):
         queryset = News.objects.all()
         serializer = NewsSerializer(instance=queryset, many=True)
@@ -29,7 +38,8 @@ class NewsViewSet(viewsets.ModelViewSet):
         serializer = AdditionalPhotosSerializer(instance=photos, many=True)
         return Response(data=serializer.data)
 
-    # post 
+    # post
+    # @swagger_auto_schema(operation_summary="getting all of the news form site", request_body=AdditionalPhotosSerializer)
     def create_new(self, request):
         serializer = NewsSerializer(data=request.data)
         if serializer.is_valid():
@@ -46,7 +56,10 @@ class NewsViewSet(viewsets.ModelViewSet):
             return Response({"detail" : "Not Found"})
         return Response({"detail" : "success"})
     
+
+    
     # post 
+    @swagger_auto_schema(request_body=AdditionalPhotosSerializer)
     def add_additional_photo(self, request):
         serializer = AdditionalPhotosSerializer(data=request.data)
         if serializer.is_valid():
@@ -81,6 +94,7 @@ class NewsViewSet(viewsets.ModelViewSet):
         return Response(data={"detail" : "success"})
     
     # put 
+    @swagger_auto_schema(request_body=AdditionalPhotosSerializer)
     def change_additional_photo(sefl, request):
         
         try:
