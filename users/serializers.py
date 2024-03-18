@@ -28,4 +28,13 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User 
-        fields = ['id', 'username', 'password', 'email']
+        # fields = ['id', 'username', 'password', 'email']
+        fields = "__all__"
+        
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=255)
+
+class LogOutSerializer(serializers.Serializer):
+    pass
+    

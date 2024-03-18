@@ -11,7 +11,7 @@ urlpatterns = [
     path('get/<int:id>/', MessageViewSet.as_view({'get': 'get_message'}), name="doc"),
     path('delete/<int:id>/', MessageViewSet.as_view({'delete': 'delete_message'}), name="doc"),
     path('add/', MessageViewSet.as_view({'post': 'add_message'}), name="doc"),
-    path('change/<int:id>', MessageViewSet.as_view({'put': 'change_message'}), name="doc"),
+    path('change/<int:id>/', MessageViewSet.as_view({'put': 'change_message'}), name="doc"),
     
 ]
 

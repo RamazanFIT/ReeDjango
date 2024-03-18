@@ -1,10 +1,15 @@
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from users.models import *
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, LoginSerializer, LogOutSerializer
 from django.shortcuts import get_object_or_404
 import jwt, datetime
-# checking auth token 
+
+
+# swagger_setting_input_fields
+# @swagger_auto_schema(operation_summary="info", request_body=Serializer)
+from drf_yasg.utils import swagger_auto_schema
+
 
 
 
@@ -45,9 +50,8 @@ class AuthorizationViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     
     # post 
+    @swagger_auto_schema(operation_summary="join to the system", request_body=LoginSerializer)
     def login(self, request):
-        # [print(i) for i in range(100)]
-        # print(request.GET)
         user = get_object_or_404(User, username=request.data["username"])
         if not user.check_password(request.data["password"]):
             return Response(data= {"detail" : "does not correct password"}, status=status.HTTP_404_NOT_FOUND)
@@ -88,10 +92,11 @@ class AuthorizationViewSet(viewsets.ModelViewSet):
         return response
 
     # post 
+    @swagger_auto_schema(operation_summary="exit", request_body=LogOutSerializer)
     def logout(self, request):
         response = Response()
         response.delete_cookie('jwt')
         response.data = {'status' : 'success'}
         return response
 
-    
+

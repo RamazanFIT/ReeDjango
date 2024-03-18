@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from .choices import Role
 
 # class Test(models.Model):
 
@@ -18,9 +18,21 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     username = models.CharField(max_length=255, unique=True)
+    user_type = models.CharField(max_length=10, choices=Role.choices, default=Role.CUSTOMER)
+    
+    name_object = models.CharField(max_length=255, null=True, default="")
+    bin = models.CharField(max_length=255, null=True, default="")
+    legal_address = models.CharField(max_length=255, null=True, default="")
+    telephone = models.CharField(max_length=255, null=True, default="")
+    file = models.FileField(upload_to='users/', default=None, null=True)
+    contact_number = models.CharField(max_length=255, null=True, default="")
+    date_contract_conclusion = models.DateTimeField(null=True, default=None)
+    contract_validity_period = models.DateTimeField(null=True, default=None)
+    financial_conditions = models.CharField(max_length=255, null=True, default="")
+    name_of_supervisor = models.CharField(max_length=255, null=True, default="")
     
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
