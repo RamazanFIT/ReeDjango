@@ -10,6 +10,8 @@ from django.shortcuts import get_object_or_404
 # swagger 
 from drf_yasg.utils import swagger_auto_schema
 
+# permissions 
+from users.views import isAdmin, isCustomer, isOwner, isAuthenticated, checkAuthentication
 
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -24,6 +26,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     
     # get 
     def get_all_message(cls, request):
+        if not isAdmin(request) : return Response(status=status.HTTP_404_NOT_FOUND)
         try:
             messages = Message.objects.all()
             serializator = MessageSerializer(instance=messages, many=True)
@@ -32,25 +35,45 @@ class MessageViewSet(viewsets.ModelViewSet):
         return Response(data=serializator.data)
             
     # get 
-    def get_message(cls, request, id):
+    def get_own_message(cls, request):
+        if not isAuthenticated(request): return Response(data={"detail" : "not found"})
         try:
-            message = Message.objects.get(pk=id)
-            serializator = MessageSerializer(instance=message)
+            # message = Message.objects.get(pk=id)
+            # serializator = MessageSerializer(instance=message)
+            user = checkAuthentication(request)
+            messages = Message.objects.filter(sender=user.data['id'])
+            serializator = MessageSerializer(instance=messages, many=True)
+            return Response(data=serializator.data)
         except:
             return Response(data={"detail" : "not found"})
-        return Response(data=serializator.data)
     
+    def get_received_message(cls, request):
+        if not isAuthenticated(request): return Response(data={"detail" : "not found"})
+        try:
+            user = checkAuthentication(request)
+            messages = Message.objects.filter(receiver=user.data['id'])
+            serializator = MessageSerializer(instance=messages, many=True)
+            return Response(data=serializator.data)
+        except:
+            return Response(data={"detail" : "not found"})
+
     # delete 
     def delete_message(cls, request, id):
+        if not isAuthenticated(request): return Response(data={"detail" : "not found"})
         try:
-            Message.objects.get(pk=id).delete()
+            message = Message.objects.get(pk=id)
+            if message.sender.id != checkAuthentication(request).data['id']: return Response(data={"detail" : "permission denied"})
+            message.delete()
+            return Response(data={"detail" : "success"})
         except:
             return Response(data={"detail" : "not found"})
         return Response(data={"detail" : "success"})
     
     # post 
     def add_message(cls, request):
+        if not isAuthenticated(request): return Response(data={"detail" : "not found"})
         try:
+            request.data['sender'] = checkAuthentication(request).data['id']
             serializer = MessageSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -62,8 +85,12 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     # put 
     def change_message(cls, request, id : int):
+        if not isAuthenticated(request): return Response(data={"detail" : "not found"})
         try:
             message = Message.objects.get(pk=id)
+            if message.sender.id != checkAuthentication(request).data['id']: 
+                return Response(data={"detail" : "permission denied"})
+            
             serializer = MessageSerializer(instance=message, data=request.data)
             if serializer.is_valid():
                 serializer.save()

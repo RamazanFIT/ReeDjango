@@ -43,3 +43,6 @@ class AllUserDataSerializer(serializers.ModelSerializer):
         model = User 
         fields = "__all__"
  
+class ChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=255)
+    

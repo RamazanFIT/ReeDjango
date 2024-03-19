@@ -1,7 +1,13 @@
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from users.models import *
-from users.serializers import UserSerializer, LoginSerializer, LogOutSerializer, AllUserDataSerializer
+from users.serializers import (
+                            UserSerializer, 
+                            LoginSerializer, 
+                            LogOutSerializer, 
+                            AllUserDataSerializer, 
+                            ChangePasswordSerializer
+)
 from django.shortcuts import get_object_or_404
 import jwt, datetime
 
@@ -46,22 +52,35 @@ def checkAuthentication(request) -> Response:
     return Response(data=serializer.data)
 
 def isAdmin(request) -> bool:
-    user = checkAuthentication(request)
-    if user.data.get('type') == 'Admin':
-        return True
-    return False
+    try:
+        user = checkAuthentication(request)
+        return user.data.get('user_type') == 'Admin'
+    except:
+        return False
+        
+        
 
 def isCustomer(request) -> bool:
-    user = checkAuthentication(request)
-    if user.data.get('type') == 'Customer':
-        return True
-    return False
+    try:
+        user = checkAuthentication(request)
+        if user.data.get('user_type') == 'Customer':
+            return True
+        return False
+    except:
+        return False
 
 def isOwner(request) -> bool:
-    user = checkAuthentication(request)
-    if user.data.get('type') == 'Owner':
-        return True
-    return False
+    try:
+        user = checkAuthentication(request)
+        if user.data.get('user_type') == 'Owner':
+            return True
+        return False
+    except:
+        return False
+
+def isAuthenticated(request):
+    return checkAuthentication(request).data != {"permission" : "denied"}
+
 
 class AuthorizationViewSet(viewsets.ModelViewSet):
     
@@ -121,5 +140,20 @@ class AuthorizationViewSet(viewsets.ModelViewSet):
     
     def get_user(cls, request):
         return checkAuthentication(request)
+        # return Response(data=isAuthenticated(request))
 
-
+    @swagger_auto_schema(operation_summary="change password", request_body=ChangePasswordSerializer)
+    def change_password(cls, request):
+        if not isAuthenticated(request):
+            return Response(data={"detail" : "permission denied"})
+        try:
+            id = checkAuthentication(request).data.get('id')
+            user = User.objects.get(pk=id)
+            user.set_password(request.data['password'])
+            user.save()
+            return Response(data={'status' : 'success'})
+        except:
+            return Response(data={"detail" : "permission denied"})
+            
+                
+        

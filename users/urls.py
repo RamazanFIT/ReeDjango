@@ -14,6 +14,7 @@ urlpatterns = [
     path('signup/', AuthorizationViewSet.as_view({'post': 'signup'}), name="authorization"),
     path('get/', AuthorizationViewSet.as_view({'get': 'get_user'}), name="authorization"),
     path('logout/', AuthorizationViewSet.as_view({'post': 'logout'}), name="authorization"),
+    path('change/', AuthorizationViewSet.as_view({'post': 'change_password'}), name="authorization"),
     
 ]
 

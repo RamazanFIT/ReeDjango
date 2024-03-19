@@ -13,6 +13,8 @@ from .serializers import (CatalogSerializer,
 from django.shortcuts import get_object_or_404
 
 
+# permissions 
+from users.views import isAdmin, isCustomer, isOwner, isAuthenticated, checkAuthentication
 
 
 class CatalogViewSet(viewsets.ModelViewSet):
@@ -33,6 +35,9 @@ class CatalogViewSet(viewsets.ModelViewSet):
     
     # patch 
     def change_catalog(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         catalog = Catalog.objects.filter(pk=request.data['id'])[0]
         catalog.name = request.data['name']
         if (not request.data.get('file', True)) and catalog.file != request.data['file']:
@@ -43,10 +48,16 @@ class CatalogViewSet(viewsets.ModelViewSet):
 
     # delete 
     def delete_catalog(self, request, pk):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         catalog = Catalog.objects.filter(pk=pk)[0].delete()
         return Response({"detail" : "success"})
     
     def add_catalog(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         serializer = CatalogSerializer(data=request.data)
         
         if serializer.is_valid():
@@ -73,6 +84,9 @@ class ReestrViewSet(viewsets.ModelViewSet):
     
     # patch 
     def change_reestr(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         reestr = Reestr.objects.filter(pk=request.data['id'])[0]
         reestr.name = request.data['name']
         if (not request.data.get('file', True)) and reestr.file != request.data['file']:
@@ -83,10 +97,16 @@ class ReestrViewSet(viewsets.ModelViewSet):
 
     # delete 
     def delete_reestr(self, request, pk):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         reestr = Reestr.objects.filter(pk=pk)[0].delete()
         return Response({"detail" : "success"})
     
     def add_reestr(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         serializer = ReestrSerializer(data=request.data)
         
         if serializer.is_valid():
@@ -114,6 +134,9 @@ class PoiskPravoobladateleyViewSet(viewsets.ModelViewSet):
     
     # patch 
     def change_poisk_pravoobladateley(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         poisk_pravoobladateley = PoiskPravoobladateley.objects.filter(pk=request.data['id'])[0]
         poisk_pravoobladateley.name = request.data['name']
         if (not request.data.get('file', True)) and poisk_pravoobladateley.file != request.data['file']:
@@ -124,10 +147,16 @@ class PoiskPravoobladateleyViewSet(viewsets.ModelViewSet):
 
     # delete 
     def delete_poisk_pravoobladateley(self, request, pk):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         poisk_pravoobladateley = PoiskPravoobladateley.objects.filter(pk=pk)[0].delete()
         return Response({"detail" : "success"})
     
     def add_poisk_pravoobladateley(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         serializer = PoiskPravoobladateleySerializer(data=request.data)
         
         if serializer.is_valid():
@@ -155,6 +184,9 @@ class InostrannyeOkupyViewSet(viewsets.ModelViewSet):
     
     # patch 
     def change_inostrannye_okupy(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         inostrannye_okupy = InostrannyeOkupy.objects.filter(pk=request.data['id'])[0]
         inostrannye_okupy.title = request.data['title']
         inostrannye_okupy.text = request.data['text']
@@ -164,10 +196,16 @@ class InostrannyeOkupyViewSet(viewsets.ModelViewSet):
 
     # delete 
     def delete_inostrannye_okupy(self, request, pk):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         inostrannye_okupy = InostrannyeOkupy.objects.filter(pk=pk)[0].delete()
         return Response({"detail" : "success"})
     
     def add_inostrannye_okupy(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                            data={"detail" : "permission denied"})
         serializer = InostrannyeOkupySerializer(data=request.data)
         
         if serializer.is_valid():

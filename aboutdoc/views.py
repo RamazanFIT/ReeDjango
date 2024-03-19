@@ -4,6 +4,8 @@ from .models import Document
 from .serializers import DocumentSerializer
 from django.shortcuts import get_object_or_404
 
+# permissions 
+from users.views import isAdmin, isCustomer, isOwner, isAuthenticated, checkAuthentication
 
 
 class DocumentViewSet(viewsets.ModelViewSet):
@@ -24,6 +26,9 @@ class DocumentViewSet(viewsets.ModelViewSet):
     
     # patch 
     def change_document(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                        data={"detail" : "permission denied"})
         document = Document.objects.filter(pk=request.data['id'])[0]
         document.label = request.data['label']
         if (not request.data.get('file', True)) and document.file != request.data['file']:
@@ -34,10 +39,17 @@ class DocumentViewSet(viewsets.ModelViewSet):
 
     # delete 
     def delete_document(self, request, pk):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                        data={"detail" : "permission denied"})
+
         document = Document.objects.filter(pk=pk)[0].delete()
         return Response({"detail" : "success"})
     
     def add_document(self, request):
+        if not isAdmin(request): 
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE, 
+                        data={"detail" : "permission denied"})
         serializer = DocumentSerializer(data=request.data)
         
         if serializer.is_valid():

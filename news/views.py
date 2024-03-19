@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 # swagger 
 from drf_yasg.utils import swagger_auto_schema
 
+from users.views import isAdmin, isCustomer, isOwner, isAuthenticated, checkAuthentication
 
 
 class NewsViewSet(viewsets.ModelViewSet):
@@ -41,6 +42,8 @@ class NewsViewSet(viewsets.ModelViewSet):
     # post
     # @swagger_auto_schema(operation_summary="getting all of the news form site", request_body=AdditionalPhotosSerializer)
     def create_new(self, request):
+        # if not isAuthenticated(request): return Response(status.HTTP_404_NOT_FOUND)
+        if not isAdmin(request): return Response(status.HTTP_404_NOT_FOUND)
         serializer = NewsSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -50,6 +53,7 @@ class NewsViewSet(viewsets.ModelViewSet):
     
     # delete 
     def delete_new(self, request, id : int):
+        if not isAdmin(request): return Response(status.HTTP_404_NOT_FOUND)
         try:
             document = News.objects.filter(pk=id)[0].delete()
         except:
@@ -61,6 +65,7 @@ class NewsViewSet(viewsets.ModelViewSet):
     # post 
     @swagger_auto_schema(request_body=AdditionalPhotosSerializer)
     def add_additional_photo(self, request):
+        if not isAdmin(request): return Response(status.HTTP_404_NOT_FOUND)
         serializer = AdditionalPhotosSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -70,6 +75,7 @@ class NewsViewSet(viewsets.ModelViewSet):
     
     # delete 
     def delete_additional_photo(self, request, id):
+        if not isAdmin(request): return Response(status.HTTP_404_NOT_FOUND)
         try:
             additional_photo = AdditionalPhotosOfNews.objects.get(pk=id)
             additional_photo.delete()
@@ -79,7 +85,7 @@ class NewsViewSet(viewsets.ModelViewSet):
     
     # put 
     def change_new(self, request):
-        
+        if not isAdmin(request): return Response(status.HTTP_404_NOT_FOUND)
         try:
             news_instance = News.objects.get(pk=request.data['id'])
         except News.DoesNotExist:
@@ -96,7 +102,7 @@ class NewsViewSet(viewsets.ModelViewSet):
     # put 
     @swagger_auto_schema(request_body=AdditionalPhotosSerializer)
     def change_additional_photo(sefl, request):
-        
+        if not isAdmin(request): return Response(status.HTTP_404_NOT_FOUND)
         try:
             news_instance = AdditionalPhotosOfNews.objects.get(pk=request.data['id'])
         except News.DoesNotExist:

@@ -47,3 +47,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
     
+# class CustomPermission(models.Model):
+#     user_id = models.ForeignKey(to=User, on_delete=models.CASCADE)
+#     user_type = models.CharField(max_length=10, choices=Role.choices, default=Role.CUSTOMER)
+    
