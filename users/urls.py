@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('login/', AuthorizationViewSet.as_view({'post': 'login'}), name="authorization"),
     path('signup/', AuthorizationViewSet.as_view({'post': 'signup'}), name="authorization"),
-    path('test/', AuthorizationViewSet.as_view({'get': 'test'}), name="authorization"),
+    path('get/', AuthorizationViewSet.as_view({'get': 'get_user'}), name="authorization"),
     path('logout/', AuthorizationViewSet.as_view({'post': 'logout'}), name="authorization"),
     
 ]

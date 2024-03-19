@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from users.models import *
-from users.serializers import UserSerializer, LoginSerializer, LogOutSerializer
+from users.serializers import UserSerializer, LoginSerializer, LogOutSerializer, AllUserDataSerializer
 from django.shortcuts import get_object_or_404
 import jwt, datetime
 
@@ -41,9 +41,27 @@ def checkAuthentication(request) -> Response:
     user_id = payload['id']
     
     user = User.objects.filter(pk=user_id)[0]
-    serializer = UserSerializer(instance=user)
+    serializer = AllUserDataSerializer(instance=user)
     
     return Response(data=serializer.data)
+
+def isAdmin(request) -> bool:
+    user = checkAuthentication(request)
+    if user.data.get('type') == 'Admin':
+        return True
+    return False
+
+def isCustomer(request) -> bool:
+    user = checkAuthentication(request)
+    if user.data.get('type') == 'Customer':
+        return True
+    return False
+
+def isOwner(request) -> bool:
+    user = checkAuthentication(request)
+    if user.data.get('type') == 'Owner':
+        return True
+    return False
 
 class AuthorizationViewSet(viewsets.ModelViewSet):
     
@@ -70,9 +88,11 @@ class AuthorizationViewSet(viewsets.ModelViewSet):
         response.data={"token" : token, "user" : serializer.data}
         response.set_cookie(key='jwt', value=token, httponly=True)
         return response
-    
+
     # post
     def signup(self, request):
+        if request.data['user_type'] == 'Admin':
+            return Response(data={"detail" : "permission denied"})
         
         serilalizer = UserSerializer(data=request.data)
         if serilalizer.is_valid():
@@ -86,10 +106,10 @@ class AuthorizationViewSet(viewsets.ModelViewSet):
         return Response(serilalizer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     # get 
-    def test(self, request):
-        response = checkAuthentication(request=request)
-        # response.data['password'] = 'krutoi'
-        return response
+    # def test(self, request):
+    #     response = checkAuthentication(request=request)
+    #     # response.data['password'] = 'krutoi'
+    #     return response
 
     # post 
     @swagger_auto_schema(operation_summary="exit", request_body=LogOutSerializer)
@@ -98,5 +118,8 @@ class AuthorizationViewSet(viewsets.ModelViewSet):
         response.delete_cookie('jwt')
         response.data = {'status' : 'success'}
         return response
+    
+    def get_user(cls, request):
+        return checkAuthentication(request)
 
 

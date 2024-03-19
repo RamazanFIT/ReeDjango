@@ -34,6 +34,16 @@ class User(AbstractUser):
     financial_conditions = models.CharField(max_length=255, null=True, default="")
     name_of_supervisor = models.CharField(max_length=255, null=True, default="")
     
+    fullname = models.CharField(max_length=255, null=True, default="")
+    name_of_group = models.CharField(max_length=255, null=True, default="")
+    tin = models.CharField(max_length=255, null=True, default="")
+    residential_address = models.CharField(max_length=255, null=True, default="")
+    name_of_bank = models.CharField(max_length=255, null=True, default="")
+    iban = models.CharField(max_length=255, null=True, default="")
+    id_card = models.CharField(max_length=255, null=True, default="")
+    by_whom_issued = models.CharField(max_length=255, null=True, default="")
+    expiration_date_id_card = models.DateTimeField(null=True, default=None)
+    
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
     
