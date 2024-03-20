@@ -18,7 +18,6 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 
-
 # class TestViewSet(viewsets.ModelViewSet):
 #     queryset = Test.objects.all()
 #     serializer_class = TestSerializer
@@ -155,5 +154,3 @@ class AuthorizationViewSet(viewsets.ModelViewSet):
         except:
             return Response(data={"detail" : "permission denied"})
             
-                
-        

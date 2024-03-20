@@ -41,6 +41,7 @@ urlpatterns = [
     path('api/catalog/', include('catalog.urls')),
     path('api/news/', include('news.urls')),
     path('api/contact/', include('contact.urls')),
+    path('api/chatgpt/', include('chatgpt.urls')),
     
 ]
 
