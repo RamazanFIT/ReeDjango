@@ -9,5 +9,5 @@ class ChatgptHistory(models.Model):
     )
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now=True)
-    message = models.CharField(max_length=255)
-    response_message = models.CharField(max_length=255)
+    message = models.CharField(max_length=2000)
+    response_message = models.CharField(max_length=2000)

@@ -8,7 +8,7 @@ class ChatgptHistorySerializer(serializers.ModelSerializer):
         fields = ['message', 'response_message']
     
 class ChatGptSerializer(serializers.Serializer):
-    message = serializers.CharField(max_length=255)
+    message = serializers.CharField(max_length=2000)
       
 
 

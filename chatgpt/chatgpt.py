@@ -9,8 +9,9 @@ def generate_response(request_text):
     response = openai.Completion.create(
         prompt=request_text,
         engine='gpt-3.5-turbo-instruct',
-        max_tokens=100,
-        temperature=0.5,
+        # max_tokens=max(1000, len(request_text) * 5),
+        max_tokens=3900,
+        temperature=0,
         n=1,
         stop=None,
         timeout=15

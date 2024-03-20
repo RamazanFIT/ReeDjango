@@ -164,7 +164,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'sssroma899@gmail.com'
 EMAIL_HOST_PASSWORD = EMAIL_KEY
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'sssroma899@gmail.com'  # Your default sender email address
+DEFAULT_FROM_EMAIL = 'sssroma899@gmail.com'  
 
 
 

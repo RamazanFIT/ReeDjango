@@ -12,7 +12,7 @@ from users.views import isAdmin, isCustomer, isOwner, isAuthenticated, checkAuth
 
 # chatgpt 
 from chatgpt.chatgpt import generate_response
-
+from .prompt import prompt
 
 class ChatGptViewSet(viewsets.ModelViewSet):
     queryset = ChatgptHistory.objects.all()
@@ -23,8 +23,7 @@ class ChatGptViewSet(viewsets.ModelViewSet):
         if not isAuthenticated(request): return Response(data={"detail" : "Plz do Authentications"})
         serializer = ChatGptSerializer(data=request.data)
         if serializer.is_valid():
-            chatgpt_message = generate_response(serializer.data.get("message"))
-            
+            chatgpt_message = generate_response(prompt + cls.get_history_in_str(request) + "(( " + serializer.data.get("message") + " ))")
             # saving data 
             user = User.objects.get(pk=checkAuthentication(request).data.get('id'))
             data = ChatgptHistory(response_message=chatgpt_message, message=serializer.data.get("message"), user_id=user)
@@ -44,6 +43,33 @@ class ChatGptViewSet(viewsets.ModelViewSet):
         except:
             return Response(data={"detail" : "some error"}, status=status.HTTP_404_NOT_FOUND)
             
-
+    def get_history_in_str(cls, request):
+        if not isAuthenticated(request): return Response(data={"detail" : "Plz do Authentications"})
+        try:
+            user = User.objects.get(pk=checkAuthentication(request).data.get('id'))
+            avg_word = 5
+            max_token = 20 * avg_word
+            str_response = ""
+            stop = False
+            check_list = cls.get_history(request).data
+            print(check_list)
+            for ii in range(len(check_list)):
+                i = check_list[ii]
+                if stop: break
+                if 'detail' in i.keys():
+                    return Response(data={"detail" : "some error"}, status=status.HTTP_404_NOT_FOUND)
+                for j in i['message']:
+                    if stop: break
+                    if len(str_response) >= max_token: stop = True
+                    str_response += j 
+                for j in i['response_message']:
+                    if stop: break
+                    if len(str_response) >= max_token: stop = True
+                    str_response += j 
+            
+            return str_response
+        except:
+            return ""
+        
 
     
