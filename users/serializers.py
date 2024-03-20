@@ -46,3 +46,8 @@ class AllUserDataSerializer(serializers.ModelSerializer):
 class ChangePasswordSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=255)
     
+
+class EmailSerilizer(serializers.Serializer):
+    email = serializers.EmailField()
+    message = serializers.CharField(max_length=255)
+    

@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-5mny-lh#@=g#-8_i21xojn2_e##!q0=zg)s2c3su13w-l=j2gp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -152,4 +152,22 @@ SPECTACULAR_SETTINGS = {
     'COMPONENT_SPLIT_REQUEST': True
 }
 
+# TO HIDE THE API 
 API_KEY = env('API_KEY')
+EMAIL_KEY = env('EMAIL_KEY')
+
+# EMAIL 
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sssroma899@gmail.com'
+EMAIL_HOST_PASSWORD = EMAIL_KEY
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'sssroma899@gmail.com'  # Your default sender email address
+
+
+
+
+
+

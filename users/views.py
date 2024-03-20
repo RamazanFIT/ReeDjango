@@ -6,7 +6,8 @@ from users.serializers import (
                             LoginSerializer, 
                             LogOutSerializer, 
                             AllUserDataSerializer, 
-                            ChangePasswordSerializer
+                            ChangePasswordSerializer,
+                            EmailSerilizer
 )
 from django.shortcuts import get_object_or_404
 import jwt, datetime
@@ -16,6 +17,10 @@ import jwt, datetime
 # @swagger_auto_schema(operation_summary="info", request_body=Serializer)
 from drf_yasg.utils import swagger_auto_schema
 
+
+# email 
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 # class TestViewSet(viewsets.ModelViewSet):
@@ -154,3 +159,25 @@ class AuthorizationViewSet(viewsets.ModelViewSet):
         except:
             return Response(data={"detail" : "permission denied"})
             
+    @swagger_auto_schema(operation_summary="email sending", request_body=EmailSerilizer)
+    def send_the_email(cls, request):
+        # pass
+        serilizer = EmailSerilizer(data=request.data)
+        if serilizer.is_valid():
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = request.data["email"]
+            message = request.data["message"]
+            subject = "Hello world!"
+            fail_silently = False
+
+            send_mail(
+                subject,
+                message, 
+                from_email,
+                [recipient_list],  
+                fail_silently=fail_silently  
+            )
+            return Response(data={'status' : 'success'})
+        else:
+            return Response(data=serilizer.errors)
+        
